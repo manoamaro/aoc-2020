@@ -1,37 +1,16 @@
 package main
 
 import (
-	"bufio"
+	"aoc-2020/internal"
 	"fmt"
-	"log"
-	"os"
-	"strconv"
 )
 
-var inputTest = []int{1721, 979, 366, 299, 675, 1456 }
-
-func openInput() (r []int) {
-	file, err := os.Open("cmd/day-01/input.txt")
-	if err != nil {
-		log.Fatalf("failed to open")
-	}
-	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanLines)
-
-	for scanner.Scan() {
-		value, _ := strconv.Atoi(scanner.Text())
-		r = append(r, value)
-	}
-
-	file.Close()
-
-	return
-}
+var inputTest = []int{1721, 979, 366, 299, 675, 1456}
 
 func part01(input []int) int {
 	for _, v1 := range input {
 		for _, v2 := range input {
-			if v1 + v2 == 2020 {
+			if v1+v2 == 2020 {
 				return v1 * v2
 			}
 		}
@@ -53,7 +32,7 @@ func part02(input []int) int {
 }
 
 func main() {
-	input := openInput()
+	input := internal.ReadFileSliceInt("cmd/day-01/input.txt")
 	fmt.Println(part01(input))
 	fmt.Println(part02(input))
 }
