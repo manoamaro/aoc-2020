@@ -8,23 +8,31 @@ import (
 )
 
 func OpenFile(path string) *os.File {
-	file, err := os.Open("cmd/day-01/input.txt")
+	file, err := os.Open(path)
 	if err != nil {
 		log.Fatalf("failed to open")
 	}
 	return file
 }
 
-func ReadFileSliceInt(path string) (r []int) {
+func ReadFileLines(path string) (r []string) {
 	file := OpenFile(path)
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
-
 	for scanner.Scan() {
-		value, _ := strconv.Atoi(scanner.Text())
+		r = append(r, scanner.Text())
+	}
+	file.Close()
+	return
+}
+
+func ReadFileSliceInt(path string) (r []int) {
+	lines := ReadFileLines(path)
+
+	for _, line := range lines {
+		value, _ := strconv.Atoi(line)
 		r = append(r, value)
 	}
 
-	file.Close()
 	return
 }
