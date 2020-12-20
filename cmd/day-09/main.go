@@ -35,26 +35,24 @@ func main() {
 
 	fmt.Println(invalidNumber)
 
-	// Prefix sums to better performance
-	prefixSums := make([]int64, len(inputNumbers)+1)
-	for i := 1; i < len(prefixSums); i++ {
-		prefixSums[i] = prefixSums[i-1] + int64(inputNumbers[i-1])
-	}
-
 	part2Result := 0
 
-	// scan for the segment, using an increasing window size
-	for windowSize := 2; windowSize < len(inputNumbers)-1; windowSize++ {
-		// test the segments
-		for i := 0; i < len(inputNumbers)-windowSize; i++ {
-			if prefixSums[i+windowSize]-prefixSums[i] == int64(invalidNumber) {
-				foundSegment := inputNumbers[i : i+windowSize]
-				sort.Ints(foundSegment)
-				part2Result = foundSegment[0] + foundSegment[len(foundSegment)-1]
-				break
-			}
+	// Caterpillar method O(n)
+	front, total := 0, 0
+	for back := 0; back < len(inputNumbers); back++ {
+		for front < len(inputNumbers) && (total+inputNumbers[front]) <= invalidNumber {
+			total += inputNumbers[front]
+			front += 1
 		}
+		if total == invalidNumber {
+			foundSegment := inputNumbers[back:front]
+			sort.Ints(foundSegment)
+			part2Result = foundSegment[0] + foundSegment[len(foundSegment)-1]
+			break
+		}
+		total -= inputNumbers[back]
 	}
+
 	fmt.Println(part2Result)
 }
 
